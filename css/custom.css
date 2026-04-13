@@ -5,12 +5,6 @@
   src: url('fonts/Inter-Regular.woff2') format('woff2');
 }
 
-body, .reveal, .slides  {
-  font-family: 'Inter', sans-serif;
-  background: var(--white-1);
-  color: var(--black);
-}
-
 /* --- Variables --- */
 
 :root {
@@ -26,6 +20,12 @@ body, .reveal, .slides  {
 }
 
 /* --- Reset reveal.js --- */
+
+body, .reveal, .slides {
+  font-family: 'Inter', sans-serif;
+  background: var(--white-1);
+  color: var(--black);
+}
 
 .reveal,
 .reveal h1, .reveal h2, .reveal h3,
@@ -48,14 +48,12 @@ body, .reveal, .slides  {
   background: var(--white-1);
 }
 
-/* --- Components --- */
-
 .slides section {
   height: 100%;
   width: 100%;
 }
 
-/* Layout */
+/* --- Layout --- */
 
 .slide-split {
   display: grid !important;
@@ -83,8 +81,6 @@ body, .reveal, .slides  {
   gap: 36px;
 }
 
-/* Sub-sections */
-
 .sub-section-0 {
   display: flex;
   flex-direction: column;
@@ -99,7 +95,7 @@ body, .reveal, .slides  {
   gap: 18px;
 }
 
-/* Typographie */
+/* --- Typographie --- */
 
 p.section-slide-title {
   font-size: 1.5rem; /* 24px */
@@ -138,7 +134,7 @@ h3.section-info-title {
   font-weight: 700 !important;
 }
 
-/* Listes */
+/* --- Listes --- */
 
 .dash-list {
   list-style: none !important;
@@ -180,7 +176,7 @@ h3.section-info-title {
   border: 3px solid var(--black);
 }
 
-/* Footer */
+/* --- Footer --- */
 
 .section-footer {
   font-size: 2.25rem; /* 36px */
@@ -194,6 +190,55 @@ h3.section-info-title {
   color: var(--black);
 }
 
+.section-footer--small {
+  font-size: 1.5rem;
+  border-top: none;
+  padding-top: 0;
+}
+
+/* --- Animations --- */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Slide 1 — éléments en cascade */
+section.slide-1.present .slide-title-text    { animation: fadeUp 0.6s ease 0s    both; }
+section.slide-1.present .slide-subtitle-text { animation: fadeUp 0.6s ease 0.15s both; }
+section.slide-1.present .logos-group         { animation: fadeUp 0.6s ease 0.3s  both; }
+
+/* Toutes les slides split — image et contenu */
+section.slide-split.present .section-img    { animation: fadeIn 0.5s ease 0.1s  both; }
+section.slide-split.present .sub-section-0  { animation: fadeUp 0.5s ease 0.15s both; }
+section.slide-split.present .sub-section-1  { animation: fadeUp 0.5s ease 0.25s both; }
+section.slide-split.present .sub-section-2  { animation: fadeUp 0.5s ease 0.35s both; }
+section.slide-split.present .sub-section-3  { animation: fadeUp 0.5s ease 0.45s both; }
+section.slide-split.present .section-footer { animation: fadeUp 0.5s ease 0.35s both; }
+section.slide-split.present .section-footer + .section-footer { animation-delay: 0.45s; }
+
+/* --- Pager --- */
+
+.reveal .slide-number {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gray);
+  background: transparent;
+  bottom: 36px;
+  right: 48px;
+  padding: 0;
+}
+
+/* ============================================================
+   Slides
+   ============================================================ */
+
 /* --- Slide 1 --- */
 
 section.slide-1 {
@@ -201,6 +246,16 @@ section.slide-1 {
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
+  isolation: isolate;
+}
+
+section.slide-1::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--white-2);
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  z-index: -1;
 }
 
 section.slide-1 .slide-title-text {
@@ -234,10 +289,7 @@ section.slide-2 .section-content {
   border-left: 3px solid var(--black);
 }
 
-section.slide-2 .sub-section-1 {
-  gap: 0;
-}
-
+section.slide-2 .sub-section-1,
 section.slide-2 .sub-section-2,
 section.slide-2 .sub-section-3 {
   gap: 0;
@@ -259,7 +311,7 @@ section.slide-4 .section-content {
   border-left: 3px solid var(--black);
 }
 
-/* --- Slide 5 --- */
+/* --- Slide 5 - Projet : GDAI Planning --- */
 
 section.slide-5 .section-content {
   border-right: 3px solid var(--black);
@@ -269,7 +321,110 @@ section.slide-5 .sub-section-1 {
   gap: 0;
 }
 
+section.slide-5 .section-footer:last-child {
+  border-top: none;
+  padding-top: 0;
+}
+
 section.slide-5 .section-img img {
   overflow: hidden;
   object-fit: cover;
+  width: 800px;
+  height: 470px;
+}
+
+/* --- Slide 6 — Portfolio --- */
+
+section.slide-6 .section-content {
+  border-left: 3px solid var(--black);
+}
+
+section.slide-6 .sub-section-1 {
+  gap: 0;
+}
+
+section.slide-6 .section-img img {
+  overflow: hidden;
+  object-fit: cover;
+  width: 800px;
+  height: 470px;
+}
+
+section.slide-6 .section-footer:last-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+/* --- Slide 7 — GLPI --- */
+
+section.slide-7 .section-content {
+  border-right: 3px solid var(--black);
+}
+
+section.slide-7 .sub-section-1 {
+  gap: 0;
+}
+
+section.slide-7 .tag-list {
+  flex-wrap: wrap;
+}
+
+section.slide-7 .section-img img {
+  overflow: hidden;
+  object-fit: cover;
+  width: 800px;
+  height: 470px;
+}
+
+section.slide-7 .section-footer:last-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+/* --- Slide 8 — Réservation Scolaire --- */
+
+section.slide-8 .section-content {
+  border-left: 3px solid var(--black);
+}
+
+section.slide-8 .sub-section-1 {
+  gap: 0;
+}
+
+section.slide-8 .section-img img {
+  overflow: hidden;
+  object-fit: cover;
+  width: 800px;
+  height: 470px;
+}
+
+section.slide-8 .section-footer:last-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+/* --- Slide 9 — SIG GO --- */
+
+section.slide-9 .section-content {
+  border-right: 3px solid var(--black);
+}
+
+section.slide-9 .sub-section-1 {
+  gap: 0;
+}
+
+section.slide-9 .tag-list {
+  flex-wrap: wrap;
+}
+
+section.slide-9 .section-img img {
+  overflow: hidden;
+  object-fit: cover;
+  width: 800px;
+  height: 470px;
+}
+
+section.slide-9 .section-footer:last-child {
+  border-top: none;
+  padding-top: 0;
 }
