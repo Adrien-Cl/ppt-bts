@@ -259,8 +259,17 @@ section.slide-4 .section-content {
   border-left: 3px solid var(--black);
 }
 
-/* --- Slide Projet --- */
+/* --- Slide 5 --- */
 
-section.slide-project .section-content {
+section.slide-5 .section-content {
   border-right: 3px solid var(--black);
+}
+
+section.slide-5 .sub-section-1 {
+  gap: 0;
+}
+
+section.slide-5 .section-img img {
+  overflow: hidden;
+  object-fit: cover;
 }
