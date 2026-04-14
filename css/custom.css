@@ -208,19 +208,41 @@ h3.section-info-title {
   to   { opacity: 1; }
 }
 
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
 /* Slide 1 — éléments en cascade */
 section.slide-1.present .slide-title-text    { animation: fadeUp 0.6s ease 0s    both; }
 section.slide-1.present .slide-subtitle-text { animation: fadeUp 0.6s ease 0.15s both; }
 section.slide-1.present .logos-group         { animation: fadeUp 0.6s ease 0.3s  both; }
 
-/* Toutes les slides split — image et contenu */
-section.slide-split.present .section-img    { animation: fadeIn 0.5s ease 0.1s  both; }
+/* Split slides — text content */
 section.slide-split.present .sub-section-0  { animation: fadeUp 0.5s ease 0.15s both; }
 section.slide-split.present .sub-section-1  { animation: fadeUp 0.5s ease 0.25s both; }
 section.slide-split.present .sub-section-2  { animation: fadeUp 0.5s ease 0.35s both; }
 section.slide-split.present .sub-section-3  { animation: fadeUp 0.5s ease 0.45s both; }
 section.slide-split.present .section-footer { animation: fadeUp 0.5s ease 0.35s both; }
 section.slide-split.present .section-footer + .section-footer { animation-delay: 0.45s; }
+
+/* Images — slide in from their respective edge */
+/* Image on the left (slides 2, 4, 6, 8) */
+section.slide-2.present .section-img,
+section.slide-4.present .section-img,
+section.slide-6.present .section-img,
+section.slide-8.present .section-img { animation: slideInLeft  0.8s ease 0.3s both; }
+
+/* Image on the right (slides 3, 5, 7, 9) */
+section.slide-3.present .section-img,
+section.slide-5.present .section-img,
+section.slide-7.present .section-img,
+section.slide-9.present .section-img { animation: slideInRight 0.8s ease 0.3s both; }
 
 /* --- Pager --- */
 
