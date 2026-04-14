@@ -450,3 +450,114 @@ section.slide-9 .section-footer:last-child {
   border-top: none;
   padding-top: 0;
 }
+
+/* --- Slide fin --- */
+
+section.slide-end {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 32px;
+  isolation: isolate;
+}
+
+section.slide-end::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--white-2);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  z-index: -1;
+}
+
+.slide-end-thanks {
+  font-size: 8rem;
+  font-weight: 900;
+  color: var(--black);
+}
+
+.slide-end-cards {
+  display: flex;
+  gap: 32px;
+  margin-top: 16px;
+}
+
+.slide-end-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 36px 48px;
+  border: 3px solid var(--black);
+  box-shadow: 4px 4px 0 var(--black);
+  background: var(--white-2);
+  text-decoration: none;
+  color: var(--black);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.slide-end-card:hover {
+  box-shadow: 6px 6px 0 var(--black);
+  transform: translate(-2px, -2px);
+}
+
+.slide-end-card i {
+  font-size: 3rem;
+  color: var(--blue);
+}
+
+.slide-end-card span {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--gray);
+}
+
+section.slide-end.present .slide-end-thanks              { animation: fadeUp 0.6s ease 0s    both; }
+section.slide-end.present .slide-end-cards               { animation: fadeUp 0.6s ease 0.2s  both; }
+
+/* --- Slide 10 — Veille Technologique --- */
+
+section.slide-10 {
+  display: grid !important;
+  grid-template-rows: auto 1fr;
+  padding: 80px !important;
+  gap: 56px;
+  background: var(--white-1);
+  box-sizing: border-box;
+}
+
+.slide-10-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-bottom: 3px solid var(--black);
+  padding-bottom: 40px;
+}
+
+.slide-10-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 48px;
+}
+
+.slide-10-grid .section-content {
+  border: 3px solid var(--black);
+  box-shadow: 4px 4px 0 var(--black);
+  gap: 32px;
+}
+
+section.slide-10 .dash-list li::before {
+  color: var(--black);
+}
+
+section.slide-10 .dash-list li,
+section.slide-10 ul {
+  line-height: 54px;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+section.slide-10.present .slide-10-header { animation: fadeUp 0.5s ease 0.1s both; }
+section.slide-10.present .slide-10-grid > .section-content:nth-child(1) { animation: fadeUp 0.5s ease 0.25s both; }
+section.slide-10.present .slide-10-grid > .section-content:nth-child(2) { animation: fadeUp 0.5s ease 0.4s  both; }
