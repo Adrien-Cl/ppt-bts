@@ -451,6 +451,43 @@ section.slide-9 .section-footer:last-child {
   padding-top: 0;
 }
 
+/* --- Slides galerie — 2 images par projet --- */
+
+section.slide-gallery {
+  display: grid !important;
+  grid-template-rows: auto 1fr;
+  padding: 80px !important;
+  gap: 56px;
+  background: var(--white-1);
+  box-sizing: border-box;
+}
+
+.slide-gallery-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-bottom: 3px solid var(--black);
+  padding-bottom: 40px;
+}
+
+.slide-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 48px;
+  align-items: center;
+}
+
+section.slide-gallery .section-img img {
+  overflow: hidden;
+  object-fit: cover;
+  width: 100%;
+  height: 470px;
+}
+
+section.slide-gallery.present .slide-gallery-header { animation: fadeUp 0.5s ease 0.1s both; }
+section.slide-gallery.present .section-img:nth-child(1) { animation: slideInLeft  0.8s ease 0.3s both; }
+section.slide-gallery.present .section-img:nth-child(2) { animation: slideInRight 0.8s ease 0.3s both; }
+
 /* --- Slide 10 — Veille Technologique --- */
 
 section.slide-10 {
