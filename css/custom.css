@@ -1,10 +1,5 @@
 /* === CUSTOM STYLES === */
 
-@font-face {
-  font-family: 'Inter';
-  src: url('fonts/Inter-Regular.woff2') format('woff2');
-}
-
 /* --- Variables --- */
 
 :root {
@@ -17,6 +12,14 @@
   /* Accent Colors */
   --light-blue: #BFDBFE;
   --blue: #2563EB;
+  /* Brutalism */
+  --border: 3px solid var(--black);
+  --shadow-sm: 4px 4px 0 var(--black);
+  --shadow: 10px 10px 0 var(--black);
+  --shadow-blue: 12px 12px 0 var(--blue);
+  /* Motion */
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --ease-back: cubic-bezier(.34, 1.56, .64, 1);
 }
 
 /* --- Reset reveal.js --- */
@@ -53,6 +56,15 @@ body, .reveal, .slides {
   width: 100%;
 }
 
+/* Le thème Reveal ajoute des marges aux titres/paragraphes : l'espacement passe par les gaps */
+.reveal .slides section h1,
+.reveal .slides section h2,
+.reveal .slides section h3,
+.reveal .slides section p,
+.reveal .slides section ul {
+  margin: 0;
+}
+
 /* --- Layout --- */
 
 .slide-split {
@@ -61,6 +73,8 @@ body, .reveal, .slides {
 }
 
 .section-img {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,17 +83,25 @@ body, .reveal, .slides {
 .section-img img {
   width: 700px;
   height: 700px;
-  border: 3px solid var(--black);
-  box-shadow: 4px 4px 0 var(--black);
+  object-fit: cover;
+  border: var(--border);
+  box-shadow: var(--shadow-blue);
 }
 
 .section-content {
+  position: relative;
+  z-index: 1;
   background: var(--white-2);
-  padding: 20px;
+  padding: 56px 72px;
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  justify-content: center;
+  gap: 32px;
 }
+
+/* Bordure côté image */
+.slide-split > .section-img:first-child + .section-content { border-left: var(--border); }
+.slide-split > .section-content:first-child { border-right: var(--border); }
 
 .sub-section-0 {
   display: flex;
@@ -95,6 +117,27 @@ body, .reveal, .slides {
   gap: 18px;
 }
 
+/* --- Numéro fantôme --- */
+
+section[data-num]::after {
+  content: attr(data-num);
+  position: absolute;
+  z-index: 0;
+  font-size: 36rem;
+  font-weight: 900;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 3px var(--black);
+  opacity: .08;
+  pointer-events: none;
+}
+
+/* Image à gauche → numéro en bas à gauche, et inversement */
+.slide-split[data-num]:has(> .section-img:first-child)::after { left: -40px; bottom: -120px; }
+.slide-split[data-num]:has(> .section-content:first-child)::after { right: -40px; bottom: -120px; }
+.slide-gallery[data-num]::after,
+.slide-10[data-num]::after { right: 40px; top: -120px; }
+
 /* --- Typographie --- */
 
 p.section-slide-title {
@@ -102,18 +145,21 @@ p.section-slide-title {
   color: var(--gray);
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: .08em;
 }
 
 h2.section-title {
   font-size: 4rem; /* 64px */
   color: var(--black);
   font-weight: 900;
+  line-height: 1.1;
 }
 
 h3.section-info-title {
   font-size: 3rem; /* 48px */
   color: var(--black);
   font-weight: 700;
+  line-height: 1.15;
 }
 
 .section-info {
@@ -128,31 +174,44 @@ h3.section-info-title {
   font-weight: 700;
 }
 
-.section-little-title {
+.reveal .section-little-title {
   font-size: 1.5rem !important; /* 24px */
   color: var(--gray) !important;
   font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: .08em;
 }
 
 /* --- Listes --- */
 
-.dash-list {
+.reveal .dash-list {
   list-style: none !important;
-  padding-left: 0;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
 }
 
 .dash-list li {
   font-size: 2rem; /* 32px */
   color: var(--gray);
   font-weight: 700;
-  line-height: 54px;
+  line-height: 1.4;
+  padding-left: 38px;
+  text-indent: -38px;
+}
+
+.dash-list li + li {
+  margin-top: 8px;
 }
 
 .dash-list li::before {
-  content: '-';
-  color: var(--gray);
-  font-size: 2.5rem;
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
   margin-right: 24px;
+  vertical-align: middle;
+  background: var(--blue);
+  border: 2px solid var(--black);
 }
 
 .dash-list li span {
@@ -160,101 +219,91 @@ h3.section-info-title {
   font-size: 2.5rem; /* 40px */
 }
 
-.tag-list {
+.reveal .tag-list {
   display: flex !important;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
   list-style: none !important;
   padding-left: 0 !important;
   margin-left: 0 !important;
 }
 
 .tag-list li {
-  font-size: 2rem; /* 32px */
+  font-size: 1.75rem; /* 28px */
   color: var(--black);
   font-weight: 700;
-  padding: 12px 8px;
-  border: 3px solid var(--black);
+  line-height: 1.3;
+  padding: 10px 16px;
+  border: var(--border);
+  background: var(--white-1);
+  box-shadow: var(--shadow-sm);
+}
+
+.tag-list li:first-child {
+  background: var(--light-blue);
 }
 
 /* --- Footer --- */
 
 .section-footer {
-  font-size: 2.25rem; /* 36px */
+  position: relative;
+  font-size: 2rem; /* 32px */
+  line-height: 1.4;
   color: var(--gray);
   font-weight: 700;
-  border-top: 3px solid var(--black);
-  padding-top: 36px;
+  padding-top: 32px;
 }
 
+/* Ligne de séparation (tracée à l'animation) */
+.section-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--black);
+  transform-origin: left;
+}
+
+.section-footer + .section-footer { padding-top: 0; }
+.section-footer + .section-footer::before { display: none; }
+
+/* Surlignage façon marqueur */
 .section-footer span {
   color: var(--black);
+  background-image: linear-gradient(var(--light-blue), var(--light-blue));
+  background-repeat: no-repeat;
+  background-position: 0 90%;
+  background-size: 100% 40%;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
-.section-footer--small {
-  font-size: 1.5rem;
-  border-top: none;
-  padding-top: 0;
-}
-
-/* --- Animations --- */
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-24px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(24px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-/* Slide 1 — éléments en cascade */
-section.slide-1.present .slide-title-text    { animation: fadeUp 0.6s ease 0s    both; }
-section.slide-1.present .slide-subtitle-text { animation: fadeUp 0.6s ease 0.15s both; }
-section.slide-1.present .logos-group         { animation: fadeUp 0.6s ease 0.3s  both; }
-
-/* Split slides — text content */
-section.slide-split.present .sub-section-0  { animation: fadeUp 0.5s ease 0.15s both; }
-section.slide-split.present .sub-section-1  { animation: fadeUp 0.5s ease 0.25s both; }
-section.slide-split.present .sub-section-2  { animation: fadeUp 0.5s ease 0.35s both; }
-section.slide-split.present .sub-section-3  { animation: fadeUp 0.5s ease 0.45s both; }
-section.slide-split.present .section-footer { animation: fadeUp 0.5s ease 0.35s both; }
-section.slide-split.present .section-footer + .section-footer { animation-delay: 0.45s; }
-
-/* Images — slide in from their respective edge */
-/* Image on the left (slides 2, 4, 6, 8) */
-section.slide-2.present .section-img,
-section.slide-4.present .section-img,
-section.slide-6.present .section-img,
-section.slide-8.present .section-img { animation: slideInLeft  0.8s ease 0.3s both; }
-
-/* Image on the right (slides 3, 5, 7, 9) */
-section.slide-3.present .section-img,
-section.slide-5.present .section-img,
-section.slide-7.present .section-img,
-section.slide-9.present .section-img { animation: slideInRight 0.8s ease 0.3s both; }
-
-/* --- Pager --- */
+/* --- Pager & progression --- */
 
 .reveal .slide-number {
   font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--gray);
-  background: transparent;
-  bottom: 36px;
-  right: 48px;
-  padding: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--black);
+  background: var(--white-1);
+  border: var(--border);
+  box-shadow: var(--shadow-sm);
+  bottom: 32px;
+  right: 40px;
+  padding: 6px 16px;
+}
+
+.reveal .progress {
+  height: 8px;
+  color: var(--blue);
+  background: var(--white-2);
+  border-top: 2px solid var(--black);
+}
+
+.reveal .progress span {
+  transition: transform .8s var(--ease-out);
 }
 
 /* ============================================================
@@ -268,6 +317,7 @@ section.slide-1 {
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
+  gap: 8px;
   isolation: isolate;
 }
 
@@ -276,6 +326,7 @@ section.slide-1::before {
   position: absolute;
   inset: 0;
   background: var(--white-2);
+  border-left: var(--border);
   clip-path: polygon(100% 0, 100% 100%, 0 100%);
   z-index: -1;
 }
@@ -284,6 +335,13 @@ section.slide-1 .slide-title-text {
   font-size: 8rem; /* 128px */
   color: var(--black);
   font-weight: 900;
+  line-height: 1.1;
+  width: fit-content;
+  padding: 0 16px;
+  background-image: linear-gradient(var(--light-blue), var(--light-blue));
+  background-repeat: no-repeat;
+  background-position: 0 85%;
+  background-size: 100% 35%;
 }
 
 section.slide-1 .slide-subtitle-text {
@@ -296,159 +354,41 @@ section.slide-1 .logos-group {
   display: flex;
   width: 600px;
   justify-content: space-between;
+  margin-top: 48px;
 }
 
 section.slide-1 .logos-group img {
   width: 250px;
   height: 250px;
-  border: 3px solid var(--black);
-  box-shadow: 4px 4px 0 var(--black);
+  border: var(--border);
+  box-shadow: var(--shadow);
 }
 
 /* --- Slide 2 --- */
 
 section.slide-2 .section-content {
-  border-left: 3px solid var(--black);
+  gap: 24px;
 }
 
 section.slide-2 .sub-section-1,
 section.slide-2 .sub-section-2,
 section.slide-2 .sub-section-3 {
-  gap: 0;
+  gap: 8px;
 }
 
-/* --- Slide 3 --- */
+/* --- Slides projet --- */
 
-section.slide-3 .section-content {
-  border-right: 3px solid var(--black);
+.slide-project .sub-section-1 {
+  gap: 8px;
 }
 
-section.slide-3 .dash-list li::before {
-  color: var(--black);
+.slide-project .sub-section-1 .section-little-title {
+  margin-top: 8px;
 }
 
-/* --- Slide 4 --- */
-
-section.slide-4 .section-content {
-  border-left: 3px solid var(--black);
-}
-
-/* --- Slide 5 - Projet : GDAI Planning --- */
-
-section.slide-5 .section-content {
-  border-right: 3px solid var(--black);
-}
-
-section.slide-5 .sub-section-1 {
-  gap: 0;
-}
-
-section.slide-5 .section-footer:last-child {
-  border-top: none;
-  padding-top: 0;
-}
-
-section.slide-5 .section-img img {
-  overflow: hidden;
-  object-fit: cover;
+.slide-project .section-img img {
   width: 800px;
   height: 470px;
-}
-
-/* --- Slide 6 — Portfolio --- */
-
-section.slide-6 .section-content {
-  border-left: 3px solid var(--black);
-}
-
-section.slide-6 .sub-section-1 {
-  gap: 0;
-}
-
-section.slide-6 .section-img img {
-  overflow: hidden;
-  object-fit: cover;
-  width: 800px;
-  height: 470px;
-}
-
-section.slide-6 .section-footer:last-child {
-  border-top: none;
-  padding-top: 0;
-}
-
-/* --- Slide 7 — GLPI --- */
-
-section.slide-7 .section-content {
-  border-right: 3px solid var(--black);
-}
-
-section.slide-7 .sub-section-1 {
-  gap: 0;
-}
-
-section.slide-7 .tag-list {
-  flex-wrap: wrap;
-}
-
-section.slide-7 .section-img img {
-  overflow: hidden;
-  object-fit: cover;
-  width: 800px;
-  height: 470px;
-}
-
-section.slide-7 .section-footer:last-child {
-  border-top: none;
-  padding-top: 0;
-}
-
-/* --- Slide 8 — Réservation Scolaire --- */
-
-section.slide-8 .section-content {
-  border-left: 3px solid var(--black);
-}
-
-section.slide-8 .sub-section-1 {
-  gap: 0;
-}
-
-section.slide-8 .section-img img {
-  overflow: hidden;
-  object-fit: cover;
-  width: 800px;
-  height: 470px;
-}
-
-section.slide-8 .section-footer:last-child {
-  border-top: none;
-  padding-top: 0;
-}
-
-/* --- Slide 9 — SIG GO --- */
-
-section.slide-9 .section-content {
-  border-right: 3px solid var(--black);
-}
-
-section.slide-9 .sub-section-1 {
-  gap: 0;
-}
-
-section.slide-9 .tag-list {
-  flex-wrap: wrap;
-}
-
-section.slide-9 .section-img img {
-  overflow: hidden;
-  object-fit: cover;
-  width: 800px;
-  height: 470px;
-}
-
-section.slide-9 .section-footer:last-child {
-  border-top: none;
-  padding-top: 0;
 }
 
 /* --- Slides galerie — 2 images par projet --- */
@@ -458,81 +398,133 @@ section.slide-gallery {
   grid-template-rows: auto 1fr;
   padding: 80px !important;
   gap: 56px;
-  background: var(--white-1);
   box-sizing: border-box;
 }
 
-.slide-gallery-header {
+.slide-gallery-header,
+.slide-10-header {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  border-bottom: 3px solid var(--black);
-  padding-bottom: 40px;
+  padding-bottom: 32px;
+}
+
+.slide-gallery-header::after,
+.slide-10-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--black);
+  transform-origin: left;
 }
 
 .slide-gallery-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 48px;
+  gap: 56px;
   align-items: center;
 }
 
 section.slide-gallery .section-img img {
-  overflow: hidden;
-  object-fit: cover;
   width: 100%;
   height: 470px;
 }
 
-section.slide-gallery.present .slide-gallery-header { animation: fadeUp 0.5s ease 0.1s both; }
-section.slide-gallery.present .section-img:nth-child(1) { animation: slideInLeft  0.8s ease 0.3s both; }
-section.slide-gallery.present .section-img:nth-child(2) { animation: slideInRight 0.8s ease 0.3s both; }
+/* Capture manquante → placeholder (injecté par le script) */
+.img-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 800px;
+  height: 470px;
+  border: var(--border);
+  box-shadow: var(--shadow);
+  background: repeating-linear-gradient(45deg, var(--white-2) 0 16px, var(--white-1) 16px 32px);
+}
+
+section.slide-gallery .img-placeholder {
+  width: 100%;
+}
+
+.img-placeholder span {
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--gray);
+  background: var(--white-1);
+  border: var(--border);
+  padding: 12px 24px;
+}
 
 /* --- Slide 10 — Veille Technologique --- */
 
 section.slide-10 {
   display: grid !important;
   grid-template-rows: auto 1fr;
-  padding: 80px !important;
-  gap: 56px;
-  background: var(--white-1);
+  padding: 64px 80px 96px !important;
+  gap: 40px;
   box-sizing: border-box;
-}
-
-.slide-10-header {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  border-bottom: 3px solid var(--black);
-  padding-bottom: 40px;
 }
 
 .slide-10-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 48px;
+  gap: 56px;
 }
 
 .slide-10-grid .section-content {
-  border: 3px solid var(--black);
-  box-shadow: 4px 4px 0 var(--black);
-  gap: 32px;
+  padding: 36px 44px;
+  justify-content: flex-start;
+  border: var(--border);
+  box-shadow: var(--shadow);
+  gap: 24px;
+}
+
+.slide-10-grid .sub-section-0 {
+  border-bottom: var(--border);
+  padding-bottom: 20px;
+}
+
+section.slide-10 .section-info {
+  font-size: 2.25rem;
+}
+
+section.slide-10 .dash-list li {
+  font-size: 1.75rem; /* 28px */
+  line-height: 1.4;
+  padding-left: 0;
+  text-indent: 0;
+}
+
+section.slide-10 .dash-list li + li {
+  margin-top: 28px;
+}
+
+section.slide-10 .dash-list li span {
+  display: block;
+  font-size: 2rem;
 }
 
 section.slide-10 .dash-list li::before {
-  color: var(--black);
+  display: none;
 }
 
-section.slide-10 .dash-list li,
-section.slide-10 ul {
-  line-height: 54px;
-  margin-left: 0 !important;
-  padding-left: 0 !important;
+section.slide-10 .dash-list li span::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 20px;
+  vertical-align: middle;
+  background: var(--blue);
+  border: 2px solid var(--black);
 }
-
-section.slide-10.present .slide-10-header { animation: fadeUp 0.5s ease 0.1s both; }
-section.slide-10.present .slide-10-grid > .section-content:nth-child(1) { animation: fadeUp 0.5s ease 0.25s both; }
-section.slide-10.present .slide-10-grid > .section-content:nth-child(2) { animation: fadeUp 0.5s ease 0.4s  both; }
 
 /* --- Slide fin --- */
 
@@ -554,35 +546,42 @@ section.slide-end::before {
   z-index: -1;
 }
 
-.slide-end-thanks {
+section.slide-end .slide-end-thanks {
   font-size: 8rem;
   font-weight: 900;
+  line-height: 1.1;
   color: var(--black);
+  padding: 0 16px;
+  background-image: linear-gradient(var(--light-blue), var(--light-blue));
+  background-repeat: no-repeat;
+  background-position: 0 85%;
+  background-size: 100% 35%;
 }
 
 .slide-end-cards {
   display: flex;
-  gap: 32px;
-  margin-top: 16px;
+  gap: 40px;
+  margin-top: 32px;
 }
 
-.slide-end-card {
+.reveal .slide-end-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  padding: 36px 48px;
-  border: 3px solid var(--black);
-  box-shadow: 4px 4px 0 var(--black);
-  background: var(--white-2);
+  padding: 40px 48px;
+  border: var(--border);
+  box-shadow: var(--shadow);
+  background: var(--white-1);
   text-decoration: none;
   color: var(--black);
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  transition: box-shadow .2s var(--ease-out), transform .2s var(--ease-out), background .2s;
 }
 
-.slide-end-card:hover {
-  box-shadow: 6px 6px 0 var(--black);
-  transform: translate(-2px, -2px);
+.reveal .slide-end-card:hover {
+  background: var(--light-blue);
+  box-shadow: 16px 16px 0 var(--black);
+  transform: translate(-6px, -6px);
 }
 
 .slide-end-card i {
@@ -592,9 +591,149 @@ section.slide-end::before {
 
 .slide-end-card span {
   font-size: 1.75rem;
-  font-weight: 600;
-  color: var(--gray);
+  font-weight: 700;
+  color: var(--black);
 }
 
-section.slide-end.present .slide-end-thanks              { animation: fadeUp 0.6s ease 0s    both; }
-section.slide-end.present .slide-end-cards               { animation: fadeUp 0.6s ease 0.2s  both; }
+/* ============================================================
+   Animations
+   ============================================================ */
+
+/* Les keyframes sans "to" reviennent au style de l'élément. */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+}
+
+@keyframes revealUp {
+  from { clip-path: inset(-20% -5% 100% -5%); transform: translateY(40px); }
+  to   { clip-path: inset(-20% -5% -20% -5%); transform: none; }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-60px); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(60px); }
+}
+
+/* Carte qui se "pose" : l'ombre pousse sous l'élément */
+@keyframes lift {
+  from { transform: translate(12px, 12px); box-shadow: 0 0 0 transparent; }
+}
+
+@keyframes dropIn {
+  0%  { opacity: 0; transform: translate(12px, 60px); box-shadow: 0 0 0 transparent; }
+  60% { opacity: 1; transform: translate(12px, 12px); box-shadow: 0 0 0 transparent; }
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(.6); }
+}
+
+@keyframes drawLine {
+  from { transform: scaleX(0); }
+}
+
+@keyframes highlight {
+  from { background-size: 0% 40%; }
+}
+
+@keyframes highlightTitle {
+  from { background-size: 0% 35%; }
+}
+
+@keyframes ghostIn {
+  from { opacity: 0; transform: translateX(120px); }
+}
+
+@keyframes panelInRight {
+  from { clip-path: polygon(100% 0, 100% 100%, 100% 100%); }
+}
+
+@keyframes panelInLeft {
+  from { clip-path: polygon(0 0, 0 0, 0 100%); }
+}
+
+/* Délais de base par bloc */
+.sub-section-0                { --d: .1s; }
+.sub-section-1                { --d: .3s; }
+.sub-section-2                { --d: .42s; }
+.sub-section-3                { --d: .54s; }
+.section-footer               { --d: .6s; }
+.section-footer + .section-footer { --d: .72s; }
+
+.tag-list li:nth-child(1) { --i: 0; }
+.tag-list li:nth-child(2) { --i: 1; }
+.tag-list li:nth-child(3) { --i: 2; }
+.tag-list li:nth-child(4) { --i: 3; }
+.tag-list li:nth-child(5) { --i: 4; }
+.tag-list li:nth-child(6) { --i: 5; }
+
+.dash-list li:nth-child(1) { --i: 0; }
+.dash-list li:nth-child(2) { --i: 1; }
+.dash-list li:nth-child(3) { --i: 2; }
+.dash-list li:nth-child(4) { --i: 3; }
+
+/* Numéro fantôme */
+section[data-num].present::after { animation: ghostIn 1.4s var(--ease-out) backwards; }
+
+/* Slide 1 */
+section.slide-1.present::before              { animation: panelInRight 1s var(--ease-out) backwards; }
+section.slide-1.present .slide-title-text    { animation: revealUp .8s var(--ease-out) .2s backwards, highlightTitle .7s var(--ease-out) .8s backwards; }
+section.slide-1.present .slide-subtitle-text { animation: fadeUp .7s var(--ease-out) .45s backwards; }
+section.slide-1.present .logos-group img:nth-child(1) { animation: dropIn .8s var(--ease-out) .65s backwards; }
+section.slide-1.present .logos-group img:nth-child(2) { animation: dropIn .8s var(--ease-out) .8s backwards; }
+
+/* Slides de contenu — titres */
+section.present .section-slide-title { animation: fadeUp .6s var(--ease-out) .1s backwards; }
+section.present h2.section-title     { animation: revealUp .8s var(--ease-out) .18s backwards; }
+
+/* Slides split — blocs de texte */
+section.slide-split.present .sub-section-1,
+section.slide-split.present .sub-section-2,
+section.slide-split.present .sub-section-3,
+section.slide-split.present .section-footer {
+  animation: fadeUp .6s var(--ease-out) var(--d) backwards;
+}
+
+section.slide-split.present .section-footer::before { animation: drawLine .8s var(--ease-out) calc(var(--d) + .1s) backwards; }
+section.slide-split.present .section-footer span    { animation: highlight .6s var(--ease-out) calc(var(--d) + .5s) backwards; }
+
+section.slide-split.present .dash-list li { animation: slideInLeft .5s var(--ease-out) calc(var(--d) + .1s + var(--i) * 80ms) backwards; }
+section.slide-split.present .tag-list li  { animation: popIn .45s var(--ease-back) calc(var(--d) + .15s + var(--i) * 60ms) backwards; }
+
+/* Images — glissent depuis leur bord puis se posent */
+section.slide-split.present > .section-img:first-child { animation: slideInLeft  .8s var(--ease-out) .15s backwards; }
+section.slide-split.present > .section-img:last-child  { animation: slideInRight .8s var(--ease-out) .15s backwards; }
+section.slide-split.present > .section-img img         { animation: lift .6s var(--ease-out) .8s backwards; }
+
+/* Galeries */
+section.slide-gallery.present .slide-gallery-header::after { animation: drawLine 1s var(--ease-out) .3s backwards; }
+section.slide-gallery.present .section-img:nth-child(1)   { animation: slideInLeft  .8s var(--ease-out) .35s backwards; }
+section.slide-gallery.present .section-img:nth-child(2)   { animation: slideInRight .8s var(--ease-out) .5s  backwards; }
+section.slide-gallery.present .section-img:nth-child(1) img { animation: lift .6s var(--ease-out) 1s    backwards; }
+section.slide-gallery.present .section-img:nth-child(2) img { animation: lift .6s var(--ease-out) 1.15s backwards; }
+
+/* Veille */
+section.slide-10.present .slide-10-header::after { animation: drawLine 1s var(--ease-out) .3s backwards; }
+section.slide-10.present .slide-10-grid > .section-content:nth-child(1) { --d: .4s;  animation: dropIn .8s var(--ease-out) var(--d) backwards; }
+section.slide-10.present .slide-10-grid > .section-content:nth-child(2) { --d: .55s; animation: dropIn .8s var(--ease-out) var(--d) backwards; }
+section.slide-10.present .dash-list li { animation: fadeUp .5s var(--ease-out) calc(var(--d) + .4s + var(--i) * 90ms) backwards; }
+
+/* Slide fin */
+section.slide-end.present::before          { animation: panelInLeft 1s var(--ease-out) backwards; }
+section.slide-end.present .slide-end-thanks { animation: revealUp .8s var(--ease-out) .2s backwards, highlightTitle .7s var(--ease-out) .8s backwards; }
+section.slide-end.present .slide-end-card:nth-child(1) { animation: dropIn .8s var(--ease-out) .5s  backwards; }
+section.slide-end.present .slide-end-card:nth-child(2) { animation: dropIn .8s var(--ease-out) .62s backwards; }
+section.slide-end.present .slide-end-card:nth-child(3) { animation: dropIn .8s var(--ease-out) .74s backwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal *,
+  .reveal *::before,
+  .reveal *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

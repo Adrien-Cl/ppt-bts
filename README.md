@@ -9,7 +9,7 @@ Présentation réalisée pour le BTS SIO Option SLAM à l'AFTEC Rennes, en alter
 - Présentation personnelle
 - Alternance au CNFPT
 - Missions quotidiennes
-- Projets réalisés (GDAI Planning, Portfolio, GLPI, Réservation Scolaire, SIG GO)
+- Projets réalisés (GDAI Planning, Portfolio, GLPI, Réservation Scolaire, SIG GO, Serveur Debian & CI/CD)
 - Veille technologique — L'IA dans le développement web
 
 ## Stack
